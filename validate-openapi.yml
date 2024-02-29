@@ -1,0 +1,21 @@
+name: Validate PetShop API
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'PetShop/**'
+  workflow_dispatch:
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        container:
+          image: openapitools/openapi-generator-cli:latest
+          volumes:
+            - ${{ github.workspace }}:/data
+        steps:
+          - name: Check out the repo
+            uses: actions/checkout@v4
+          - name: Run openapi-generator-cli
+            run: |
+                echo "Running ${{ github.jobs[github.job].name }}"
+                docker-entrypoint.sh validate -i /data/PetShop/openapi.json
